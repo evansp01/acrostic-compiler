@@ -94,14 +94,14 @@ export class AcrFormatService {
       if (answer.length != mapping.length) {
         throw new Error(`Answer ${answer} and mapping ${mapping} have lengths ${answer.length} != ${mapping.length}`)
       }
-      // Increment label
-      label = String.fromCharCode(label.charCodeAt(0) + 1);
       clues.push({
         clue: clueNoLabel,
         answer: answer,
         label: label,
         mapping: mapping,
       })
+      // Increment label
+      label = String.fromCharCode(label.charCodeAt(0) + 1);
     }
     return clues
   }
