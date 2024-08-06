@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{xstring}
+\usepackage{tikz}
+\usepackage{anyfontsize}
+\usepackage{multicol}
+\usepackage[landscape]{geometry}
+\pagestyle{empty}
+\geometry{
+  a4paper,
+  left=6mm,
+  right=6mm,
+  top=15mm,
+  bottom=10mm,
+}
+\usetikzlibrary{calc}
+
+\newcommand{\Size}{0.98cm}
+\tikzset{Square/.style={
+    inner sep=0pt,
+    text width=\Size, 
+    minimum size=\Size,
+    draw=black,
+    align=center
+    }
+}
+
+
+\newcommand{\SquareFill}[3]
+{
+  \begin{minipage}{0.9cm}
+    \centering
+      {\fontsize{6}{6}\selectfont\vphantom{A}\smash{#1}\hfill#2}%
+      \\[0.1cm]
+      {\TextField[
+        backgroundcolor={white},
+        bordercolor={},
+        borderwidth=0,
+        name=#2,
+        maxlen=1,
+        width=0.8cm,
+        height=0.55cm,
+        align=1,
+        charsize=15pt,
+        value=#3
+        ]{}
+      }%
+  \end{minipage}
+}
+
+\begin{document}
+
+\hspace*{\fill}\begin{Large} {{- title -}} \end{Large}\hspace*{\fill}
+
+\hspace*{\fill}\begin{textit} {{- author -}} \end{textit}\hspace*{\fill}
+%
+\begin{Form}
+\noindent
+\begin{center}
+\begin{tikzpicture}[draw=black, ultra thick, x=\Size,y=\Size]
+% {% for square in white_squares %}
+  \node [Square] at ( {{- square.column -}} , {{- square.row -}} ) { 
+    \SquareFill{ {{- square.label -}} }{ {{- square.index -}} }{ {{- square.value -}} }
+  };
+% {% endfor %}
+% {% for square in black_squares %}
+  \node [Square, fill=black] at ( {{- square.column -}} , {{- square.row -}} ) {};
+% {% endfor %}
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[draw=black, ultra thick, x=\Size,y=\Size]
+  \node[text width=2cm] at (0, {{- quote_author[0].row -}} ) {\textemdash};
+% {% for tile in quote_author %}
+  \node [Square] at ( {{- tile.column -}} , {{- tile.row -}} ) { \SquareFill{ {{- tile.label -}} }{ {{- tile.index -}}  }{} };
+% {% endfor %}
+\end{tikzpicture}
+\end{center}
+
+\begin{multicols}{2}
+\noindent
+% {% for clue in clues %}
+{{ clue.label -}}. {{ clue.hint -}} \nopagebreak\newline
+\begin{tikzpicture}[draw=black, ultra thick, x=\Size,y=\Size]
+% {% for tile in clue.answer %}
+  \node [Square] at ( {{- tile.column -}} , {{- tile.row -}} ) { \SquareFill{}{ {{- tile.index -}} }{} };
+% {% endfor %}
+\end{tikzpicture}
+\newline
+% {% endfor %}
+\end{multicols}
+\end{Form}
+\end{document}
